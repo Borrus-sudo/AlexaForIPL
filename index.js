@@ -5,16 +5,35 @@ let prev = "";
 let timer = 50;
 let anchorTag = 'https://www.cricbuzz.com';
 let lastWicketRecord = "";
+let lastCommentaryRecord = [];
+let lastBallRecorder = ""
+const FOUR = "four";
+const SIX = "six";
 
-function extractData(data) {
-    const lastWicket = data.slice(data.indexOf("Last Wkt"), data.indexOf(data.match(/Last\s\d/)[0].trim()) + 1).trim();
-    if (lastWicketRecord != lastWicket) {
-        lastWicketRecord = lastWicket;
-        //say wicket gone
+function extractWicket(data) {
+    const latestWicket = data.slice(data.indexOf("Last Wkt"), data.indexOf("Last 5")).trim();
+    if (lastWicketRecord != latestWicket) {
+        lastWicketRecord = latestWicket;
+        console.log(latestWicket);
     }
-    // console.log(lastWicket);
 }
 
+function extractBoundaries(commentary) {
+    commentary = commentary.split("Last 5 overs")[1];
+    const latestBall = commentary.match(/(\d{1,2}\.\d{1})/g)[0];
+    if (lastBallRecorder != latestBall) {
+        lastBallRecorder = latestBall;
+        if (latestBall != '20.0') {
+            const latestBallCommentary = commentary.split(latestBall)[0].trim().toLowerCase();
+            if (latestBallCommentary.includes(FOUR)) {
+                console.log("bloody four");
+
+            } else if (latestBallCommentary.includes(SIX)) {
+                console.log("bloody six");
+            }
+        }
+    }
+}
 (async() => {
     const checkIfIPLMatch = (data) => {
         const teams = ["CSK", "DC", "RCB", "MI", "SRH", "RR", "KKR", "PBKS"];
@@ -54,10 +73,11 @@ const refresher2 = async() => {
         data,
     } = await axios.get(anchorTag);
     const $ = cheerio.load(data);
-    // const keyStatsHTML = $('div.cb-key-lst-wrp.cb-font-12.cb-text-gray');
-    const allCommentary = $('div.cb-col-67.cb-col');
-    // const keyStats = keyStatsHTML.text().trim();
-    // extractData(keyStats);
-    console.log(scoreBoard.text());
+    const keyStatsHTML = $('div.cb-key-lst-wrp.cb-font-12.cb-text-gray');
+    const commentaryHTML = $('div.cb-col-67.cb-col');
+    const keyStats = keyStatsHTML.text().trim();
+    const commentary = commentaryHTML.text();
+    extractWicket(keyStats);
+    extractBoundaries(commentary);
     setTimeout(refresher, timer);
 }
