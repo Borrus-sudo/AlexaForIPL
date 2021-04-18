@@ -1,5 +1,6 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const io = require('socket.io')();
 let baseURL = `https://www.cricbuzz.com/`;
 let prev = "";
 let timer = 50;
@@ -9,6 +10,12 @@ let lastCommentaryRecord = [];
 let lastBallRecorder = ""
 const FOUR = "four";
 const SIX = "six";
+
+//Socket.io initialization
+io.on("connection", socket => {
+    console.log(socket);
+});
+io.listen(3000);
 
 function extractWicket(data) {
     const latestWicket = data.slice(data.indexOf("Last Wkt"), data.indexOf("Last 5")).trim();
