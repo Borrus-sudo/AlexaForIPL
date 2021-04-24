@@ -50,9 +50,6 @@ const refresher = async() => {
         const commentary = commentaryHTML.text();
         extract.extractBoundaries(commentary);
         extract.extractWicket(keyStats);
-        // const part2 = commentary.split('Recent: ...')[1];
-        // console.log(part2);
-        // console.log(part2.split('Have Your Say')[0].trim());
         setTimeout(refresher, timer);
     }
 }
