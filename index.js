@@ -4,7 +4,7 @@ const extract = require('./extracts');
 let baseURL = `https://www.cricbuzz.com/`;
 let prev = "";
 let timer = 50;
-let anchorTag = 'https://www.cricbuzz.com';
+let anchorTagURL = 'https://www.cricbuzz.com';
 (async() => {
     const checkIfIPLMatch = (data) => {
         const teams = ["CSK", "DC", "RCB", "MI", "SRH", "RR", "KKR", "PBKS"];
@@ -24,7 +24,7 @@ let anchorTag = 'https://www.cricbuzz.com';
     const li = $(ul.children()[0]);
     const anchor = $(li.children()[0]);
     if (checkIfIPLMatch(matchData[0])) {
-        anchorTag += anchor.attr('href');
+        anchorTagURL += anchor.attr('href');
         refresher();
     }
 })();
@@ -43,7 +43,7 @@ const refresher = async() => {
     } {
         const {
             data,
-        } = await axios.get(anchorTag);
+        } = await axios.get(anchorTagURL);
         const $ = cheerio.load(data);
         const keyStatsHTML = $('div.cb-key-lst-wrp.cb-font-12.cb-text-gray');
         const commentaryHTML = $('div.cb-col-67.cb-col');
