@@ -23,9 +23,10 @@ let anchorTag = 'https://www.cricbuzz.com';
     const ul = $(currentMatches.children()[0]);
     const li = $(ul.children()[0]);
     const anchor = $(li.children()[0]);
-    anchorTag += anchor.attr('href');
-    if (checkIfIPLMatch(matchData[0]))
+    if (checkIfIPLMatch(matchData[0])) {
+        anchorTag += anchor.attr('href');
         refresher();
+    }
 })();
 const refresher = async() => {
     {
@@ -48,8 +49,8 @@ const refresher = async() => {
         const commentaryHTML = $('div.cb-col-67.cb-col');
         const keyStats = keyStatsHTML.text().trim();
         const commentary = commentaryHTML.text();
-        extract.extractBoundaries(commentary);
         extract.extractWicket(keyStats);
+        extract.extractBoundaries(commentary);
         setTimeout(refresher, timer);
     }
 }
